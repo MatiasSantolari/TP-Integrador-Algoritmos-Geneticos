@@ -13,22 +13,39 @@ def crearCromosoma(): #crea la matriz bidimensional binaria pero solo se asigna 
     for g in range(5):
         matrizCromo.append(cromosoma)
         print(matrizCromo)
-    return matrizCromo            
+
+    #Matriz vacia
+    print("matriz:")
+    for m in matrizCromo:
+        print(m)
+    return matrizCromo
+
+
+
 
 def asginarAerogeneardor(matrizCromo):
+    matrizA=[]
     for i in range(len(matrizCromo)):
-      for j in range(len(matrizCromo[i])):
-          binario = random.randint(0,1)
-          print(binario)
-          matrizCromo[i][j] = binario
-      print(matrizCromo[i])
-    return matrizCromo
+        for j in range(len(matrizCromo[i])):
+            binario = random.randint(0,1)
+            print(binario)
+            matrizCromo[i][j] = binario
+        print(matrizCromo[i])
+        a=tuple(matrizCromo[i])
+        print(a)
+        matrizA.append(a)
+    return matrizA
  
 matriz=[]
 matrizAerogeneradores =[]    
 matriz.extend(crearCromosoma())
 matrizAerogeneradores.extend(asginarAerogeneardor(matriz))
-print(matrizAerogeneradores) #¿PORQUE ME MUESTRA REPETIDA 5 VECES LA ULTIMA LISTA?
+print(matrizAerogeneradores)
+
+#matriz llena
+print("matriz llena:")
+for m in matrizAerogeneradores:
+    print(m)
 
 
 #for i in range(50):
