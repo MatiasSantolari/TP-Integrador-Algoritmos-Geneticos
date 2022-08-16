@@ -1,16 +1,15 @@
 #tpi 
 #Dudas
-#¿Cuantos aerogeneradores hay que poner?
 import random 
 
 def crearCromosoma(): #crea la matriz bidimensional binaria pero solo se asigna 0 (se piensa que es el terreno sin ningun aerogenerador)
     matrizCromo=[]
     cromosoma = []
-    for t in range(5): #cantidad de columnas
+    for t in range(10): #cantidad de columnas
         #for j in range(4): # cantidad de filas
         cromosoma.append(0)
         print(cromosoma)
-    for g in range(5):
+    for g in range(10):
         matrizCromo.append(cromosoma)
         print(matrizCromo)
 
