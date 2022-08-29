@@ -33,18 +33,22 @@ def asignarObstaculos(matriz, i): #maximo de 20 espacios de terreno ocupado
 
 
 def asginarAerogeneardor(matrizCromo):
-    matrizA=[]
-    #cont = 0
+    matrizA = []
+    cont = 0
     for i in range(len(matrizCromo)):
         for j in range(len(matrizCromo[i])):
             if (matrizCromo[i][j] == 2): 
                 pass
             else:
-                #if(cont < 25):
-                binario = random.randint(0,1)
-                matrizCromo[i][j] = binario
-                #if (binario == 1):
-                #    cont = cont + 1
+                binario = random.randint(0, 1)
+                if binario == 1:
+                    cont += 1
+                    print("contador actual: ", cont)
+                    if cont < 26:
+                        matrizCromo[i][j] = binario
+                    else:
+                        matrizCromo[i][j] = 0
+                else: matrizCromo[i][j] = binario
         print(matrizCromo[i])
         a=tuple(matrizCromo[i])
         print(a)
