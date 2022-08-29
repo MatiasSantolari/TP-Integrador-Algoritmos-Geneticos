@@ -19,16 +19,32 @@ def crearCromosoma(): #crea la matriz bidimensional binaria pero solo se asigna 
         print(m)
     return matrizCromo
 
-
+def asignarObstaculos(matriz, i): #maximo de 20 espacios de terreno ocupado
+                                    #el numero 2 signifca que hay un obstaculo
+    fila = []    
+    fila = list(matriz[i])
+    print("fila", fila)
+    for t in range(len(fila)):
+        print(t)
+        fila[t] = 2;
+    fila = tuple(fila)
+    matriz[i] = fila
+    return matriz    
 
 
 def asginarAerogeneardor(matrizCromo):
     matrizA=[]
+    #cont = 0
     for i in range(len(matrizCromo)):
         for j in range(len(matrizCromo[i])):
-            binario = random.randint(0,1)
-            print(binario)
-            matrizCromo[i][j] = binario
+            if (matrizCromo[i][j] == 2): 
+                pass
+            else:
+                #if(cont < 25):
+                binario = random.randint(0,1)
+                matrizCromo[i][j] = binario
+                #if (binario == 1):
+                #    cont = cont + 1
         print(matrizCromo[i])
         a=tuple(matrizCromo[i])
         print(a)
@@ -38,6 +54,8 @@ def asginarAerogeneardor(matrizCromo):
 matriz=[]
 matrizAerogeneradores =[]    
 matriz.extend(crearCromosoma())
+matriz = asignarObstaculos(matriz, 0)
+matriz = asignarObstaculos(matriz, 9)
 matrizAerogeneradores.extend(asginarAerogeneardor(matriz))
 print(matrizAerogeneradores)
 
@@ -46,6 +64,6 @@ print("matriz llena:")
 for m in matrizAerogeneradores:
     print(m)
 
+# se tiene que simular un sector fijo para poner establecimiento necesario para que funcione los aerogeneradores
 
-#for i in range(50):
     
