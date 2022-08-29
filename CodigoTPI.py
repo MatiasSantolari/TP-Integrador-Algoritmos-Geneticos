@@ -54,20 +54,40 @@ def asginarAerogeneardor(matrizCromo):
         print(a)
         matrizA.append(a)
     return matrizA
- 
-matriz=[]
-matrizAerogeneradores =[]    
-matriz.extend(crearCromosoma())
-matriz = asignarObstaculos(matriz, 0)
-matriz = asignarObstaculos(matriz, 9)
-matrizAerogeneradores.extend(asginarAerogeneardor(matriz))
-print(matrizAerogeneradores)
 
-#matriz llena
-print("matriz llena:")
-for m in matrizAerogeneradores:
-    print(m)
+
+def CalcularfuncObj():
+
+ 
+
+
+
 
 # se tiene que simular un sector fijo para poner establecimiento necesario para que funcione los aerogeneradores
 
-    
+
+#poblacion incial
+poblacionInicial = []
+matriz = []
+
+matriz.extend(crearCromosoma())
+matriz = asignarObstaculos(matriz, 0)
+matriz = asignarObstaculos(matriz, 9)
+for i in range(10):
+    matrizAerogeneradores = []
+    matrizAerogeneradores.extend(asginarAerogeneardor(matriz))
+    print(matrizAerogeneradores)
+
+    # matriz llena
+    print("matriz llena:")
+    for m in matrizAerogeneradores:
+        print(m)
+
+    poblacionInicial.append(matrizAerogeneradores)
+
+
+
+for i in poblacionInicial:
+    for j in i:
+        print(j)
+    print("---------------------------")
