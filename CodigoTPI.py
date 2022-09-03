@@ -1,6 +1,28 @@
 #tpi 
 #Dudas
-import random 
+import random
+from math import log
+
+# definicion de variables globales
+probabilidadCrossover = 0.75
+probabilidadMutacion = 0.05
+#la direccion del viento la voy a considerar constante y que recorra de OESTE a ESTE
+viento = 7 #en metros/segundos
+potencia = 164 #en Kw, no me acuerdo la formula que uso eric, cuando me la pase la coloco aca, pero por ahora le pongo una constante para seguir programando
+
+#variables globales necesarias para el efecto estelar
+const_proporcionalidad = 0.5 #NO SE QUE ES, LE PUSE 0.5 PARA QUE HICIERA EL CALCULO
+radio_turbina = 25 #en metros
+radio_estela = radio_turbina * const_proporcionalidad
+
+#variables globales necesarias para la potencia afectada por la estela
+coef_induccion_axial = 1/3 # este seria el ideal
+z= 46 # Altura mínima de la góndola : 46 metros
+z_inicial = 0.0024 # la rugosidad del terreno. El cual corresponde al factor de rugosidad del tipo de terreno “campo abierto con superficie lisa”
+coef_arrastre = 1/(2 * log(z/z_inicial))
+dist_entre_turbinas = 4 * radio_turbina
+
+
 
 def crearCromosoma(): #crea la matriz bidimensional binaria pero solo se asigna 0 (se piensa que es el terreno sin ningun aerogenerador)
     matrizCromo=[]
@@ -56,7 +78,30 @@ def asginarAerogeneardor(matrizCromo):
     return matrizA
 
 
-def CalcularfuncObj():
+# funcion objetivo f(cromosoma) donde cromosoma es el cromosoma que se pasa como parámetro
+def CalcularfuncObj(cromosoma):
+    #el calculo es el siguiente:
+    """El cromosoma representa al parque eolico, cada gen representa un espacio de dicho parque
+       que puede contener o no un aerogenerador.
+       Se procede a hacer una sumatoria de potencias por cada sector del parque (osea cada gen del
+       cromosoma)
+            -si el gen es 0 o 2, entonces la potencia es nula
+            -si el gen es 1 pero no lo afecta la estela, entonces la potencia se saca con la formular
+             de la potencia (por el momento solo usaremos la constante potencia)
+            -si el gen es 1 pero lo afecta la estela, entonces le aplicaremos otra formula"""
+    total=0
+    for i in range(len(cromosoma)):
+        for j in range(len(cromosoma[i])):
+            if (cromosoma[i][j] == 2) or (cromosoma[i][j] == 0):
+                pass
+            else:
+                if (cromosoma[i][j] == 1) and ((cromosoma[i][j-1] == 1) or (cromosoma[i][j-1] == 2)):
+                    #significa que se aplica la estela
+                    p = viento * (1 - ((2 * coef_induccion_axial)/(1 + coef_arrastre * (dist_entre_turbinas/radio_estela)) ** 2))
+                else:
+                    p = potencia
+                total = total + p
+    return total
 
  
 
