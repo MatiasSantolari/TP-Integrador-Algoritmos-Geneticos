@@ -3,6 +3,11 @@
 import random
 from math import log
 
+import random
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+
 # definicion de variables globales
 probabilidadCrossover = 0.75
 probabilidadMutacion = 0.05
@@ -90,6 +95,8 @@ def CalcularfuncObj(cromosoma):
              de la potencia (por el momento solo usaremos la constante potencia)
             -si el gen es 1 pero lo afecta la estela, entonces le aplicaremos otra formula"""
     total=0
+    i=0
+    j=0
     for i in range(len(cromosoma)):
         for j in range(len(cromosoma[i])):
             if (cromosoma[i][j] == 2) or (cromosoma[i][j] == 0):
@@ -164,17 +171,258 @@ def seleccionCrossover(cromo1,cromo2):  # cromo 1 y cromo 2 van a tener c/u el c
 
 
 def mutacion(cromo1): #le paso el cromosoma despues de haber con el croosover (puede que no se haya aplicado) y cromo es una cromosoma que a la vez es una lista de genes donde c/gen es un ENTERO binario
+    cromoLista = []
+    for i in cromo1:
+        c = list(i)
+        cromoLista.append(c)
+    print("Lista de listas del cromosoma", cromoLista)
     d = random.uniform(0, 1)
     if (d <= probabilidadMutacion):
         i = random.randint(0, 9) #determinar una posicion al azar del cromosoma entre 0 a 29 (incluyendo 0 y 29)
         j = random.randint(0, 9) #determinar una pos
-        if(cromo1[i][j] == 0):
-            cromo1[i][j]=1
+        if(cromoLista[i][j] == 0):
+            cromoLista[i][j]=1
         else:
-            cromo1[i][j]=0
-    return cromo1 #cromo1 es un cromosoma, que a la vez es una lista de genes donde c/gen es un ENTERO binario
+            cromoLista[i][j]=0
+    cromito = tuple(cromoLista)
+    return cromito #cromo1 es un cromosoma, que a la vez es una lista de genes donde c/gen es un ENTERO binario
 
 # se tiene que simular un sector fijo para poner establecimiento necesario para que funcione los aerogeneradores
+
+
+"""#####################################
+   #####################################
+   #####################################
+   Funciones que utilizare exclusivamente para generar datos que utilizare para mostrar en tablas y graficos
+   usando pandas y matplotlib, para obtener y visualizar mayor cantidad de informacion de los resultados 
+   obtenidos
+   #####################################
+   #####################################
+   #####################################"""
+
+def suma(lista):  # suma todos los valores de la funcion objetivo de cada cromosoma
+    cont = 0
+    for u in range(len(lista)):
+        cont += lista[u]
+    return cont
+
+
+def promedio(lista):  # me devuelve el promedio de la listaFunjObj que es la lista que contiene los valores en formato ENTERO de la funcion objetivo de cada cromosoma
+                        # ( mas adelante tambien se trabaja con la lista de la funcion fitness que es uan lista con los valores FLOTANTES de la funcion fitness de cada cromosoma)
+    suma = 0
+    for u in range(len(lista)):
+        suma += lista[u] #suma tiene el valor a sumar todos los valores
+    promedio = suma / len(lista)
+    return promedio #promedio vuelve como un dato en formato FLOTANTE (ya sea que se trabajo con listaFunObj como listaFitness)
+
+
+def maximo(lista):  # devuelve el valor maximo de la lista funcion objetivo (y mas adelante tambien se trabaja con la lista de la funcion fitness) en formato FLOTANTE
+                    # ( mas adelante tambien se trabaja con la lista de la funcion fitness y lo que retorna tambien es un valor FLOTANTE)
+    return max(lista)
+
+def minimo(lista): # devuelve el valor minimo de la lista funcion objetivo en formato FLOTANTE
+                    # ( mas adelante tambien se trabaja con la lista de la funcion fitness y lo que retorna en un valor FLOTANTE)
+    return min(lista)
+
+def cromoMaximo(listaPoblacionInicial):
+    valor = listaPoblacionInicial[9] #como esta ordenada de menor a mayor, siempre vamos a queres el cromosoma en la ultima posicion(que en esta caso es 9) que seria
+                                     #el cromosoma con el valor de la funcion objetivo mas alto
+    return valor #valor contiene el cromosoma en formato ENTERO con mayor valor de la funcion objetivo
+
+#Funciones para graficar:
+def graficarFitness(min, max, prom):
+    plt.style.use('default')
+    plt.plot(min, label='Minimo Fitness')
+    plt.plot(max, label='Maximo Fitness')
+    plt.plot(prom, label='Promedio Fitness')
+    plt.legend()
+    plt.title('Fitness')
+    plt.xlabel('Generaciones')
+    plt.grid(True)
+    plt.show()
+
+
+def graficarObj(min, max, prom):
+    plt.style.use('default')
+    plt.plot(min, label='Minima Funcion Objetivo')
+    plt.plot(max, label='Maxima Funcion Objetivo')
+    plt.plot(prom, label='Promedio Funcion Objetivo')
+    plt.legend()
+    plt.title('Funcion Objetivo')
+    plt.xlabel('Generaciones')
+    plt.grid(True)
+    plt.show()
+
+def graficarTodo(minF, maxF, promF, minO, maxO, promO):
+    plt.style.use('default')
+    plt.plot(minF, label='Minimo Fitness')
+    plt.plot(maxF, label='Maximo Fitness')
+    plt.plot(promF, label='Promedio Fitness')
+    plt.plot(minO, label='Minima Funcion Objetivo')
+    plt.plot(maxO, label='Maxima Funcion Objetivo')
+    plt.plot(promO, label='Promedio Funcion Objetivo')
+    plt.legend()
+    plt.title('Fitness + Funcion Objetivo')
+    plt.xlabel('Generaciones')
+    plt.grid(True)
+    plt.show()
+
+"""#####################################
+   #####################################
+   #####################################
+   Fin seccion de funciones para pandas y matplotlib
+   #####################################
+   #####################################
+   #####################################"""
+
+"""
+for i in poblacionInicial:
+    for j in i:
+        print(j)
+    print("---------------------------")
+"""
+
+
+
+"""
+cont = 0
+for i in listaSiguienteGeneracion:
+    cont = cont + 1
+    print ("hijo nro ", cont, " :", i, "\n")
+"""
+print("#############################################################################"
+      "#############################################################################"
+      "#############################################################################"
+      "#############################################################################"
+      "#############################################################################"
+      "#############################################################################"
+      "#############################################################################"
+      "#############################################################################")
+
+
+
+def ejecutarPrograma(poblacion):
+    # lista de valores de potencias de cada parque eolico generado
+    listaPotencias = []
+    for i in poblacion:
+        potencia_parque = CalcularfuncObj(i)
+        listaPotencias.append(potencia_parque)
+
+    # muestro las potencias que obtuve de cada uno de los 10 parques
+    for i in listaPotencias:
+        print(i)
+
+    # aplico fitness a dichas potencias
+    listaFitness = aplicarFitness(listaPotencias)
+
+    """##############################################################
+       ##############################################################
+       ##############################################################"""
+    maxiObj = maximo(
+        listaPotencias)  # retorna el valor maximo de la lista que tiene los valores de la funcion objetivo de cada cromosoma en formato FLOTANTE
+    cromosomaMaximo = cromoMaximo(poblacion)
+    miniObj = minimo(
+        listaPotencias)  # retorna el valor minimo de la lista que tiene los valores de la funcion objetivo de cada cromosoma en formato FLOTANTE
+    promeObj = promedio(
+        listaPotencias)  # retorna el promedio de la lista que tiene los valores de la funcion objetivo de cada cromosoma en formato FLOTANTE
+    maxiFit = maximo(
+        listaFitness)  # retorna el valor maximo de la lista que tiene los valores de la funcion fitness de cada cromosoma en formato FLOTANTE
+    miniFit = minimo(listaFitness)
+    promeFit = promedio(listaFitness)
+    #
+
+    # Guardamos maxiObj, miniObj, promeObj, maxiFit, miniFit, promeFit sus respectivas listas
+    listaMinimosFit.append(miniFit)
+    listaMaximosFit.append(maxiFit)
+    listaPromFit.append(promeFit)
+    listaMinimosObj.append(miniObj)
+    listaMaximosObj.append(maxiObj)
+    listaPromObj.append(promeObj)
+
+    print('Datos de la Generacion nro: ')
+    tabla = pd.DataFrame(
+        {'pobl': poblacion, 'F obj': listaPotencias, 'Fitness': listaFitness})
+    print(tabla)
+    print(cromosomaMaximo, ' ', maxiObj, ' ', miniObj, ' ', promeObj, ' ', maxiFit, '', miniFit, ' ', promeFit)
+
+
+    #########################################################
+    tablaMinFit = pd.DataFrame({'Min Fitness': listaMinimosFit})
+    tablaMaxFit = pd.DataFrame({'Max Fitness': listaMaximosFit})
+    tablaProbFit = pd.DataFrame({'Prom Fitness': listaPromFit})
+
+    tablaMinObj = pd.DataFrame({'Min Obj': listaMinimosObj})
+    tablaMaxObj = pd.DataFrame({'Max Obj': listaMaximosObj})
+    tablaProbObj = pd.DataFrame({'Prom Obj': listaPromObj})
+
+    graficarFitness(tablaMinFit, tablaMaxFit, tablaProbFit)
+    graficarObj(tablaMinObj, tablaMaxObj, tablaProbObj)
+    graficarTodo(tablaMinFit, tablaMaxFit, tablaProbFit, tablaMinObj, tablaMaxObj, tablaProbObj)
+    """##############################################################
+       ##############################################################
+       ##############################################################"""
+    # calcular porcentajes que van a tener cada parque en la ruleta de 100 pocisiones
+    listaPorcentajesRuleta = partRuleta(listaFitness)
+
+    ruleta = []  # lista de los valores en formato ENTERO de los porcentajes redondeados de la funcion fitness
+    for i in partRuleta(
+            listaFitness):  # esta funcion trae una lista que va a tener los porcentajes en formato FLOTANTE de cada cromosoma segun su valor de la funcion fitness
+        if i > 1:
+            n = round(i,
+                      0)  # n va a tener el valor en formato ENTERO redondeado del porcentaje relacionado a la funcion fitness
+            ruleta.append(int(n))
+        else:
+            ruleta.append(1)
+
+    listaPadres = []
+    listaPadres.extend(seleccionRuleta(ruleta, int(sum(ruleta)), poblacionInicial))
+    print(listaPadres)
+
+    z = 0
+    i = 0
+    hijo1 = 0
+    hijo2 = 0
+    listaSiguienteGeneracion = []
+    for i in range(5):  # se repite 5 veces xq hay 5 pares de cromosomas padres para aplicar el crossover
+        c1 = [x for x in listaPadres[
+            z]]  # c1 es una lista en formato ENTERO donde cada posicion contiene un gen, es decir c1 es un cromosoma padre
+        c2 = [x for x in listaPadres[
+            z + 1]]  # c2 es una lista en formato ENTERO donde cada posicion contiene un gen, es decir c2 es un cromosoma padre
+        hijo1, hijo2 = seleccionCrossover(c1,
+                                          c2)  # hijo1 y hijo son listas de Enteros donde cada posicion es un gen entero. hijo1 y hijo2 son cromosoma
+        hijo1 = mutacion(hijo1)
+        hijo2 = mutacion(hijo2)
+        z += 2  # con la variable z me ubico a cada par de posicion en el arreglo padre
+        listaSiguienteGeneracion.append(hijo1)
+        listaSiguienteGeneracion.append(hijo2)
+
+    """
+    cont = 0
+    for i in listaSiguienteGeneracion:
+        cont = cont + 1
+        print ("hijo nro ", cont, " :", i, "\n")
+    """
+    print("#############################################################################"
+          "#############################################################################"
+          "#############################################################################"
+          "#############################################################################"
+          "#############################################################################"
+          "#############################################################################"
+          "#############################################################################"
+          "#############################################################################")
+    return listaSiguienteGeneracion
+
+
+
+#Programa Principal
+
+listaMinimosFit = []
+listaMaximosFit = []
+listaPromFit = []
+listaMinimosObj = []
+listaMaximosObj = []
+listaPromObj = []
+
 
 #poblacion incial
 poblacionInicial = []
@@ -196,60 +444,11 @@ for i in range(10):
     poblacionInicial.append(matrizAerogeneradores)
 
 
+listaSiguienteGeneracion = []
+listaSiguienteGeneracion.extend(ejecutarPrograma(poblacionInicial))
+for i in range(19):
+    listaSiguienteGeneracion = ejecutarPrograma(listaSiguienteGeneracion)
 
-for i in poblacionInicial:
-    for j in i:
-        print(j)
-    print("---------------------------")
-
-#lista de valores de potencias de cada parque eolico generado
-listaPotencias = []
-for i in poblacionInicial:
-    potencia_parque = CalcularfuncObj(i)
-    listaPotencias.append(potencia_parque)
-
-#muestro las potencias que obtuve de cada uno de los 10 parques
-for i in listaPotencias:
-    print(i)
-
-#aplico fitness a dichas potencias
-listaFitness = aplicarFitness(listaPotencias)
-
-#calcular porcentajes que van a tener cada parque en la ruleta de 100 pocisiones
-listaPorcentajesRuleta = partRuleta(listaFitness)
-
-
-ruleta = [] # lista de los valores en formato ENTERO de los porcentajes redondeados de la funcion fitness
-for i in partRuleta(listaFitness): #esta funcion trae una lista que va a tener los porcentajes en formato FLOTANTE de cada cromosoma segun su valor de la funcion fitness
-    if i > 1:
-        n = round(i, 0) #n va a tener el valor en formato ENTERO redondeado del porcentaje relacionado a la funcion fitness
-        ruleta.append(int(n))
-    else:
-        ruleta.append(1)
-
-listaPadres=[]
-listaPadres.extend(seleccionRuleta(ruleta, int(sum(ruleta)), poblacionInicial))
-print(listaPadres)
-
-z=0
-i=0
-hijo1=0
-hijo2=0
-listaSiguienteGeneracion=[]
-for i in range(5): #se repite 5 veces xq hay 5 pares de cromosomas padres para aplicar el crossover
-    c1= [x for x in listaPadres[z]] # c1 es una lista en formato ENTERO donde cada posicion contiene un gen, es decir c1 es un cromosoma padre
-    c2 = [x for x in listaPadres[z+1]] # c2 es una lista en formato ENTERO donde cada posicion contiene un gen, es decir c2 es un cromosoma padre
-    hijo1, hijo2 = seleccionCrossover(c1, c2) # hijo1 y hijo son listas de Enteros donde cada posicion es un gen entero. hijo1 y hijo2 son cromosoma
-    hijo1 = mutacion(hijo1)
-    hijo2 = mutacion(hijo2)
-    z += 2 #con la variable z me ubico a cada par de posicion en el arreglo padre
-    listaSiguienteGeneracion.append(hijo1)
-    listaSiguienteGeneracion.append(hijo2)
-
-cont = 0
-for i in listaSiguienteGeneracion:
-    cont = cont + 1
-    print ("hijo nro ", cont, " :", i, "\n")
 
 
 
