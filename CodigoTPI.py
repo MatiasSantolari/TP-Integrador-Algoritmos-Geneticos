@@ -345,19 +345,6 @@ def ejecutarPrograma(poblacion):
     print(tabla)
     print(cromosomaMaximo, ' ', maxiObj, ' ', miniObj, ' ', promeObj, ' ', maxiFit, '', miniFit, ' ', promeFit)
 
-
-    #########################################################
-    tablaMinFit = pd.DataFrame({'Min Fitness': listaMinimosFit})
-    tablaMaxFit = pd.DataFrame({'Max Fitness': listaMaximosFit})
-    tablaProbFit = pd.DataFrame({'Prom Fitness': listaPromFit})
-
-    tablaMinObj = pd.DataFrame({'Min Obj': listaMinimosObj})
-    tablaMaxObj = pd.DataFrame({'Max Obj': listaMaximosObj})
-    tablaProbObj = pd.DataFrame({'Prom Obj': listaPromObj})
-
-    graficarFitness(tablaMinFit, tablaMaxFit, tablaProbFit)
-    graficarObj(tablaMinObj, tablaMaxObj, tablaProbObj)
-    graficarTodo(tablaMinFit, tablaMaxFit, tablaProbFit, tablaMinObj, tablaMaxObj, tablaProbObj)
     """##############################################################
        ##############################################################
        ##############################################################"""
@@ -446,8 +433,20 @@ for i in range(10):
 
 listaSiguienteGeneracion = []
 listaSiguienteGeneracion.extend(ejecutarPrograma(poblacionInicial))
-for i in range(19):
+for i in range(99):
     listaSiguienteGeneracion = ejecutarPrograma(listaSiguienteGeneracion)
+
+tablaMinFit = pd.DataFrame({'Min Fitness': listaMinimosFit})
+tablaMaxFit = pd.DataFrame({'Max Fitness': listaMaximosFit})
+tablaProbFit = pd.DataFrame({'Prom Fitness': listaPromFit})
+
+tablaMinObj = pd.DataFrame({'Min Obj': listaMinimosObj})
+tablaMaxObj = pd.DataFrame({'Max Obj': listaMaximosObj})
+tablaProbObj = pd.DataFrame({'Prom Obj': listaPromObj})
+
+graficarFitness(tablaMinFit, tablaMaxFit, tablaProbFit)
+graficarObj(tablaMinObj, tablaMaxObj, tablaProbObj)
+graficarTodo(tablaMinFit, tablaMaxFit, tablaProbFit, tablaMinObj, tablaMaxObj, tablaProbObj)
 
 
 
