@@ -301,7 +301,7 @@ print("#########################################################################
 
 
 
-def ejecutarPrograma(poblacion):
+def ejecutarPrograma(poblacion, iteracion):
     # lista de valores de potencias de cada parque eolico generado
     listaPotencias = []
     for i in poblacion:
@@ -339,7 +339,7 @@ def ejecutarPrograma(poblacion):
     listaMaximosObj.append(maxiObj)
     listaPromObj.append(promeObj)
 
-    print('Datos de la Generacion nro: ')
+    print('Datos de la Generacion nro: ', iteracion)
     tabla = pd.DataFrame(
         {'pobl': poblacion, 'F obj': listaPotencias, 'Fitness': listaFitness})
     print(tabla)
@@ -432,9 +432,9 @@ for i in range(10):
 
 
 listaSiguienteGeneracion = []
-listaSiguienteGeneracion.extend(ejecutarPrograma(poblacionInicial))
-for i in range(99):
-    listaSiguienteGeneracion = ejecutarPrograma(listaSiguienteGeneracion)
+listaSiguienteGeneracion.extend(ejecutarPrograma(poblacionInicial, i))
+for i in range(599):
+    listaSiguienteGeneracion = ejecutarPrograma(listaSiguienteGeneracion, i)
 
 tablaMinFit = pd.DataFrame({'Min Fitness': listaMinimosFit})
 tablaMaxFit = pd.DataFrame({'Max Fitness': listaMaximosFit})
