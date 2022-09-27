@@ -71,7 +71,17 @@ def asginarAerogeneardor(matrizCromo):
                 if binario == 1:
                     cont += 1
                     print("contador actual: ", cont)
-                    if cont < 26:
+
+                    #contador va a regular que se de manera equitativa 1s a todas las filas mas o menos
+                    #(para resolver el problema de que las ultimas 3 filas aprox no queden todas con 0s)
+                    """contador = 0
+                    for n in range(len(matrizCromo[i])):
+                        if matrizCromo[i][n] == 1:
+                            contador += 1"""
+                    # fin de la logica del contador
+
+                    print("contador actual: ", cont)
+                    if cont < 26 and """contador < 4""":
                         matrizCromo[i][j] = binario
                     else:
                         matrizCromo[i][j] = 0
@@ -433,7 +443,7 @@ for i in range(10):
 
 listaSiguienteGeneracion = []
 listaSiguienteGeneracion.extend(ejecutarPrograma(poblacionInicial, i))
-for i in range(599):
+for i in range(9):
     listaSiguienteGeneracion = ejecutarPrograma(listaSiguienteGeneracion, i)
 
 tablaMinFit = pd.DataFrame({'Min Fitness': listaMinimosFit})
