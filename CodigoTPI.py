@@ -120,6 +120,21 @@ def CalcularfuncObj(cromosoma):
                 total = total + p
     return total
 
+def calcularfuncObjFila(fila):
+    total = 0
+    i = 0
+    for i in range(len(fila)):
+        if (fila[i] == 2) or (fila[i] == 0):
+            pass
+        else:
+            if (fila[i] == 1) and ((fila[i-1] == 1) or (fila[i-1] == 2)):
+                # significa que se aplica la estela
+                p = viento * (1 - ((2 * coef_induccion_axial) / (1 + coef_arrastre * (dist_entre_turbinas / radio_estela)) ** 2))
+            else:
+                p = potencia
+            total = total + p
+    return total
+
 def fitness(x, subLista) -> float: #x es el valor de la funcion objetivo de un solo cromosoma
     return x / sum(subLista)
 
@@ -169,7 +184,7 @@ def seleccionRuleta(ruleta, posiciones,poblacion):  # ruleta es la lista de valo
 
 def seleccionCrossover(cromo1,cromo2):  # cromo 1 y cromo 2 van a tener c/u el cromosoma en formato ENTERO donde cada posicion es un gen binario ENTERO y cromosoma es un padre (ya convertido a ENTERO) de la listaPadres
 
-    a = random.uniform(0, 1)  # La función random.uniform devuelve un número real entre 0 y 1
+    """a = random.uniform(0, 1)  # La función random.uniform devuelve un número real entre 0 y 1
     if (a <= probabilidadCrossover):
         fila = random.randint(0,9)  # random.randint devuelve número entero aleatorio en el intervalo cerrado (tambien toma los limites) entre 0 y 29
         #columna = random.randint(0,9)
@@ -178,7 +193,20 @@ def seleccionCrossover(cromo1,cromo2):  # cromo 1 y cromo 2 van a tener c/u el c
         cromo1 = aux1  # esos hijos se guardan donde anteriormente estaban los padres
         cromo2 = aux2
     return cromo1, cromo2  # cromo 1 y cromo2 son listas que contienen valores ENTEROS donde cada valor es un gen, es decir c1 y c2 son un Cromosoma
-
+    """
+    a = random.uniform(0, 1)  # La función random.uniform devuelve un número real entre 0 y 1
+    if (a <= probabilidadCrossover):
+        hijo = []
+        for i in range(len(cromo1)):
+            potenciaFila1 = calcularfuncObjFila(cromo1[i])
+            potenciaFila2 = calcularfuncObjFila(cromo2[i])
+            if (potenciaFila1 == potenciaFila2):
+                hijo.append(cromo1[i])
+            if (potenciaFila2 <= potenciaFila1):
+                hijo.append(cromo1[i])
+            if (potenciaFila1 <= potenciaFila2):
+                hijo.append(cromo2[i])
+        return hijo
 
 def mutacion(cromo1): #le paso el cromosoma despues de haber con el croosover (puede que no se haya aplicado) y cromo es una cromosoma que a la vez es una lista de genes donde c/gen es un ENTERO binario
     cromoLista = []
