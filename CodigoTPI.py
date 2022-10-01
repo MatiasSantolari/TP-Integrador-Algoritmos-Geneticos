@@ -171,10 +171,10 @@ def seleccionRuleta(ruleta, posiciones,poblacion):  # ruleta es la lista de valo
 
     ruletaDefinitiva = []  # es la lista de 100 posiciones en donde a cada posicion de esta lista se le asigna el cromosoma en formato STRING en la posicion i de la lista poblacion
     padres = []  # es la lista con los cromosomas en formato STRING que fueron seleccionados en la lista ruletaDefinitiva, que serian los padres
-    for i in range(10):
+    for i in range(50):
         for j in range(ruleta[i]):
             ruletaDefinitiva.append(poblacion[i])  # el tamaño de ruletaDefinitiva es posiciones->int(suma(ruleta))
-    for k in range(10):
+    for k in range(50):
         a = random.randint(0,
                            posiciones - 1)  # genera un numero entero entre 0 y posiciones (que seria 100 aprox). Seria la "Tirada de la bolita en la ruleta"
         padres.append(ruletaDefinitiva[
@@ -196,17 +196,41 @@ def seleccionCrossover(cromo1,cromo2):  # cromo 1 y cromo 2 van a tener c/u el c
     """
     a = random.uniform(0, 1)  # La función random.uniform devuelve un número real entre 0 y 1
     if (a <= probabilidadCrossover):
-        hijo = []
+        #En hijo1 se aplicara crosover por fila
+        hijo1 = []
         for i in range(len(cromo1)):
+            cromo1[i] = list(cromo1[i])
+            cromo2[i] = list(cromo2[i])
+
             potenciaFila1 = calcularfuncObjFila(cromo1[i])
             potenciaFila2 = calcularfuncObjFila(cromo2[i])
             if (potenciaFila1 == potenciaFila2):
-                hijo.append(cromo1[i])
-            if (potenciaFila2 <= potenciaFila1):
-                hijo.append(cromo1[i])
-            if (potenciaFila1 <= potenciaFila2):
-                hijo.append(cromo2[i])
-        return hijo
+                hijo1.append(cromo1[i])
+            if (potenciaFila2 < potenciaFila1):
+                hijo1.append(cromo1[i])
+            if (potenciaFila1 < potenciaFila2):
+                hijo1.append(cromo2[i])
+        #En hijo2 se aplicara crosover por columna
+        """primero voy a realizar la transpuesta de ambos padres, para asi usar la misma logica de las filas
+        pero con las columnas, que ahora por ser una matriz compuesta, seran filas"""
+        cromo1_Transpuesta = (np.transpose(cromo1)).tolist()
+        cromo2_Transpuesta = (np.transpose(cromo2)).tolist()
+        hijo2 = []
+        for i in range(len(cromo1)):
+            potenciaFila1 = calcularfuncObjFila(cromo1_Transpuesta[i])
+            potenciaFila2 = calcularfuncObjFila(cromo2_Transpuesta[i])
+            if (potenciaFila1 == potenciaFila2):
+                hijo2.append(cromo1_Transpuesta[i])
+            if (potenciaFila2 < potenciaFila1):
+                hijo2.append(cromo1_Transpuesta[i])
+            if (potenciaFila1 < potenciaFila2):
+                hijo2.append(cromo2_Transpuesta[i])
+        hijo2 = (np.transpose(hijo2)).tolist()
+
+    else:
+        hijo1 = cromo1
+        hijo2 = cromo2
+    return hijo1, hijo2
 
 def mutacion(cromo1): #le paso el cromosoma despues de haber con el croosover (puede que no se haya aplicado) y cromo es una cromosoma que a la vez es una lista de genes donde c/gen es un ENTERO binario
     cromoLista = []
@@ -408,13 +432,12 @@ def ejecutarPrograma(poblacion, iteracion):
     hijo1 = 0
     hijo2 = 0
     listaSiguienteGeneracion = []
-    for i in range(5):  # se repite 5 veces xq hay 5 pares de cromosomas padres para aplicar el crossover
+    for i in range(25):  # se repite 5 veces xq hay 5 pares de cromosomas padres para aplicar el crossover
         c1 = [x for x in listaPadres[
             z]]  # c1 es una lista en formato ENTERO donde cada posicion contiene un gen, es decir c1 es un cromosoma padre
         c2 = [x for x in listaPadres[
             z + 1]]  # c2 es una lista en formato ENTERO donde cada posicion contiene un gen, es decir c2 es un cromosoma padre
-        hijo1, hijo2 = seleccionCrossover(c1,
-                                          c2)  # hijo1 y hijo son listas de Enteros donde cada posicion es un gen entero. hijo1 y hijo2 son cromosoma
+        hijo1, hijo2 = seleccionCrossover(c1, c2)  # hijo1 y hijo2 son listas de Enteros donde cada posicion es un gen entero. hijo1 y hijo2 son cromosoma
         hijo1 = mutacion(hijo1)
         hijo2 = mutacion(hijo2)
         z += 2  # con la variable z me ubico a cada par de posicion en el arreglo padre
@@ -456,7 +479,7 @@ matriz = []
 matriz.extend(crearCromosoma())
 matriz = asignarObstaculos(matriz, 0)
 matriz = asignarObstaculos(matriz, 9)
-for i in range(10):
+for i in range(50):
     matrizAerogeneradores = []
     matrizAerogeneradores.extend(asginarAerogeneardor(matriz))
     print(matrizAerogeneradores)
@@ -471,7 +494,7 @@ for i in range(10):
 
 listaSiguienteGeneracion = []
 listaSiguienteGeneracion.extend(ejecutarPrograma(poblacionInicial, i))
-for i in range(9):
+for i in range(199):
     listaSiguienteGeneracion = ejecutarPrograma(listaSiguienteGeneracion, i)
 
 tablaMinFit = pd.DataFrame({'Min Fitness': listaMinimosFit})
