@@ -286,9 +286,16 @@ def minimo(lista): # devuelve el valor minimo de la lista funcion objetivo en fo
                     # ( mas adelante tambien se trabaja con la lista de la funcion fitness y lo que retorna en un valor FLOTANTE)
     return min(lista)
 
-def cromoMaximo(listaPoblacionInicial):
-    valor = listaPoblacionInicial[9] #como esta ordenada de menor a mayor, siempre vamos a queres el cromosoma en la ultima posicion(que en esta caso es 9) que seria
-                                     #el cromosoma con el valor de la funcion objetivo mas alto
+def cromoMaximo(listaPoblacion, maxobj, listaPotencias):
+    
+    nroIteracion = 0
+
+    for j in listaPotencias:        #buscamos la posición de la potencia máxima, para así poder acceder al cromosoma más exitoso
+        if j == maxobj:
+            pos = nroIteracion
+        nroIteracion = nroIteracion + 1
+    
+    valor = listaPoblacion[pos] 
     return valor #valor contiene el cromosoma en formato ENTERO con mayor valor de la funcion objetivo
 
 #Funciones para graficar:
@@ -382,7 +389,7 @@ def ejecutarPrograma(poblacion, iteracion):
        ##############################################################"""
     maxiObj = maximo(
         listaPotencias)  # retorna el valor maximo de la lista que tiene los valores de la funcion objetivo de cada cromosoma en formato FLOTANTE
-    cromosomaMaximo = cromoMaximo(poblacion)
+    cromosomaMaximo = cromoMaximo(poblacion, maxiObj, listaPotencias)
     miniObj = minimo(
         listaPotencias)  # retorna el valor minimo de la lista que tiene los valores de la funcion objetivo de cada cromosoma en formato FLOTANTE
     promeObj = promedio(
@@ -400,6 +407,7 @@ def ejecutarPrograma(poblacion, iteracion):
     listaMinimosObj.append(miniObj)
     listaMaximosObj.append(maxiObj)
     listaPromObj.append(promeObj)
+    listaMaxCromo.append(cromosomaMaximo)
 
     print('Datos de la Generacion nro: ', iteracion)
     tabla = pd.DataFrame(
@@ -470,6 +478,7 @@ listaPromFit = []
 listaMinimosObj = []
 listaMaximosObj = []
 listaPromObj = []
+listaMaxCromo = []
 
 
 #poblacion incial
@@ -491,10 +500,10 @@ for i in range(50):
 
     poblacionInicial.append(matrizAerogeneradores)
 
-
+i = 0
 listaSiguienteGeneracion = []
 listaSiguienteGeneracion.extend(ejecutarPrograma(poblacionInicial, i))
-for i in range(199):
+for i in range(1, 200):
     listaSiguienteGeneracion = ejecutarPrograma(listaSiguienteGeneracion, i)
 
 tablaMinFit = pd.DataFrame({'Min Fitness': listaMinimosFit})
@@ -504,6 +513,25 @@ tablaProbFit = pd.DataFrame({'Prom Fitness': listaPromFit})
 tablaMinObj = pd.DataFrame({'Min Obj': listaMinimosObj})
 tablaMaxObj = pd.DataFrame({'Max Obj': listaMaximosObj})
 tablaProbObj = pd.DataFrame({'Prom Obj': listaPromObj})
+
+max = 0
+nroIteracion = 0
+for k in listaMaximosObj:
+    if k > max:
+        #print ('Máximo provisorio', k)
+        max = k
+        nroGeneracion = nroIteracion
+    nroIteracion = nroIteracion + 1
+
+print('\nPoblacion inicial FO MAX: ', listaMaximosObj[0])
+print('Máximo F. objetivo: ', max)
+print('Generacion con máximo objetivo: ', nroGeneracion)
+print('Cromosoma más óptimo: ', listaMaxCromo[nroGeneracion])
+
+print('\nParque eólico más óptimo:\n')
+for m in listaMaxCromo[nroGeneracion]:
+        print(m)
+
 
 graficarFitness(tablaMinFit, tablaMaxFit, tablaProbFit)
 graficarObj(tablaMinObj, tablaMaxObj, tablaProbObj)
