@@ -227,10 +227,26 @@ def seleccionCrossover(cromo1,cromo2):  # cromo 1 y cromo 2 van a tener c/u el c
                 hijo2.append(cromo2_Transpuesta[i])
         hijo2 = (np.transpose(hijo2)).tolist()
 
+        #ahora verifico que los hijos tengan igual o menos de 25 molinos
+        #caso contrario los descarto y pasan los padres a ser hijos
+        contH1 = 0
+        contH2 = 0
+        for m in hijo1:
+            aerogeneradoresPorFilaH1 = m.count(1)
+            contH1 += aerogeneradoresPorFilaH1
+        if contH1 > 25:
+            hijo1 = cromo1
+        for n in hijo2:
+            aerogeneradoresPorFilaH2 = n.count(1)
+            contH2 += aerogeneradoresPorFilaH2
+        if contH2 > 25:
+            hijo2 = cromo2
+        #Fin de la verificacion de cant de molinos
     else:
         hijo1 = cromo1
         hijo2 = cromo2
     return hijo1, hijo2
+
 
 def mutacion(cromo1): #le paso el cromosoma despues de haber con el croosover (puede que no se haya aplicado) y cromo es una cromosoma que a la vez es una lista de genes donde c/gen es un ENTERO binario
     cromoLista = []
