@@ -26,7 +26,9 @@ z= 46 # Altura mínima de la góndola : 46 metros
 z_inicial = 0.0024 # la rugosidad del terreno. El cual corresponde al factor de rugosidad del tipo de terreno “campo abierto con superficie lisa”
 coef_arrastre = 1/(2 * log(z/z_inicial))
 dist_entre_turbinas = 4 * radio_turbina
-
+#el parque es una matriz de 10x10 donde cada elemento de la matriz es un espacio de 100 metros cuadrados.
+#entonces como la distancia entre turbinas es de 100 metros verá que en la funcObj la estela solamente es aplicadas
+#a un aerogenerador si tiene a una casilla de distancia otro aerogenerador o obstaculo.
 
 
 def crearCromosoma(): #crea la matriz bidimensional binaria pero solo se asigna 0 (se piensa que es el terreno sin ningun aerogenerador)
@@ -241,9 +243,8 @@ def verificarCantAerogeneradores(cromosoma):
     cont = 0
     for m in cromosoma:
         aerogeneradoresPorFila = m.count(1)
-        cromosoma += aerogeneradoresPorFila
-    print("contH1: ", cromosoma)
-    if cromosoma > 25:
+        cont += aerogeneradoresPorFila
+    if cont > 25:
         return True
     else:
         return False
