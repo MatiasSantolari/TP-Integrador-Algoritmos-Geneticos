@@ -15,8 +15,9 @@ probabilidadMutacion = 0.05
 viento = 7 #en metros/segundos
 potencia = 164 #en Kw, no me acuerdo la formula que uso eric, cuando me la pase la coloco aca, pero por ahora le pongo una constante para seguir programando
 
-#variables globales necesarias para el efecto estelar
-const_proporcionalidad = 1 #NO SE QUE ES, LE PUSE 1 PARA QUE HICIERA EL CALCULO (TIENE QUE SER UN VALOR MAYOR E IGUAL A 1 Y MENOR A 4)
+
+#variables globales necesarias para el efecto estela
+const_proporcionalidad = 1 #(TIENE QUE SER UN VALOR MAYOR E IGUAL A 1 Y MENOR A 4)
 radio_turbina = 25 #en metros
 radio_estela = radio_turbina * const_proporcionalidad
 
@@ -26,9 +27,10 @@ z= 46 # Altura mínima de la góndola : 46 metros
 z_inicial = 0.0024 # la rugosidad del terreno. El cual corresponde al factor de rugosidad del tipo de terreno “campo abierto con superficie lisa”
 coef_arrastre = 1/(2 * log(z/z_inicial))
 dist_entre_turbinas = 4 * radio_turbina
-#el parque es una matriz de 10x10 donde cada elemento de la matriz es un espacio de 100 metros cuadrados.
-#entonces como la distancia entre turbinas es de 100 metros verá que en la funcObj la estela solamente es aplicadas
-#a un aerogenerador si tiene a una casilla de distancia otro aerogenerador o obstaculo.
+
+"""el parque es una matriz de 10x10 donde cada elemento de la matriz es un espacio de 100 metros cuadrados.
+entonces como la distancia entre turbinas es de 100 metros verá que en la funcObj la estela solamente es aplicadas
+a un aerogenerador si tiene a una casilla de distancia otro aerogenerador o obstaculo."""
 
 
 def crearCromosoma(): #crea la matriz bidimensional binaria pero solo se asigna 0 (se piensa que es el terreno sin ningun aerogenerador)
