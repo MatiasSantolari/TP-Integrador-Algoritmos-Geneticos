@@ -148,6 +148,29 @@ def aplicarFitness(subLista): #Aca sublista es listaFunObj que es la lista que c
     return listaFit  # retorna una lista de los valores de la funcion Fitness aplicadas a los cromosomas en formato flotante
 
 
+# -----------------------------------------------------------------------------------------------------------
+# a Aca se desarrolla el elitismo
+
+def elitismo(poblacion, listaFitness):
+    listaFit = listaFitness.copy()
+    cromosomasSeleccionados = []
+    for d in range(2):
+        fitMax = max(listaFit)
+        """print("el fitness con valor mas grande es: ", fitMax)
+        print()"""
+        indice = listaFit.index(
+            fitMax)  # Los otros elementos con el mismo valor se ignoran porque ya ha encontrado una coincidencia dentro de la lista.
+        """print("indice donde esta el valor maximo en listaFit: ", indice)
+        print()"""
+        cromosomasSeleccionados.append(poblacion[indice])
+        listaFit[indice] = 0
+        """print("listaFit al hacer la baja logica del maximo (asi no se vuelve a elegir): ", listaFit)
+        print()"""
+    return cromosomasSeleccionados
+
+
+# -------------------------------------------------------------------------------------------------
+
 def partRuleta(listaFitness):  # se calcula el porcentaje de cada cromosoma y se le asigna
 # un arco de circunferencia proporcional a su fitness. porc
 # El parametro es la listaFitness que es uan lista con los valores en formatO FLOTANTE de la funcion fitness aplicada a cada cromosoma
@@ -395,8 +418,8 @@ def ejecutarPrograma(poblacion, iteracion):
         listaPotencias.append(potencia_parque)
 
     # muestro las potencias que obtuve de cada uno de los 10 parques
-    for i in listaPotencias:
-        print(i)
+    """for i in listaPotencias:
+        print(i)"""
 
     # aplico fitness a dichas potencias
     listaFitness = aplicarFitness(listaPotencias)
@@ -449,6 +472,10 @@ def ejecutarPrograma(poblacion, iteracion):
             ruleta.append(1)
 
     listaPadres = []
+
+    cromosomasElitismo = elitismo(poblacion, listaFitness)
+    listaPadres.extend(cromosomasElitismo)
+
     listaPadres.extend(seleccionRuleta(ruleta, int(sum(ruleta)), poblacionInicial))
     print(listaPadres)
 
