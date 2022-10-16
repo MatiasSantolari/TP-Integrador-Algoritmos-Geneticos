@@ -37,27 +37,17 @@ def crearCromosoma(): #crea la matriz bidimensional binaria pero solo se asigna 
     matrizCromo=[]
     cromosoma = []
     for t in range(10): #cantidad de columnas
-        #for j in range(4): # cantidad de filas
         cromosoma.append(0)
-        print(cromosoma)
     for g in range(10):
         matrizCromo.append(cromosoma)
-        print(matrizCromo)
-
-    #Matriz vacia
-    print("matriz:")
-    for m in matrizCromo:
-        print(m)
     return matrizCromo
 
 def asignarObstaculos(matriz, i): #maximo de 20 espacios de terreno ocupado
                                     #el numero 2 signifca que hay un obstaculo
     fila = []    
     fila = list(matriz[i])
-    print("fila", fila)
     for t in range(len(fila)):
-        print(t)
-        fila[t] = 2;
+        fila[t] = 2
     fila = tuple(fila)
     matriz[i] = fila
     return matriz    
@@ -66,6 +56,8 @@ def asignarObstaculos(matriz, i): #maximo de 20 espacios de terreno ocupado
 def asginarAerogeneardor(matrizCromo):
     matrizA = []
     cont = 0
+    i = 0
+    j = 0
     for i in range(len(matrizCromo)):
         for j in range(len(matrizCromo[i])):
             if (matrizCromo[i][j] == 2): 
@@ -74,25 +66,13 @@ def asginarAerogeneardor(matrizCromo):
                 binario = random.randint(0, 1)
                 if binario == 1:
                     cont += 1
-                    print("contador actual: ", cont)
 
-                    #contador va a regular que se de manera equitativa 1s a todas las filas mas o menos
-                    #(para resolver el problema de que las ultimas 3 filas aprox no queden todas con 0s)
-                    """contador = 0
-                    for n in range(len(matrizCromo[i])):
-                        if matrizCromo[i][n] == 1:
-                            contador += 1"""
-                    # fin de la logica del contador
-
-                    print("contador actual: ", cont)
-                    if cont < 26 and """contador < 4""":
+                    if cont < 26:
                         matrizCromo[i][j] = binario
                     else:
                         matrizCromo[i][j] = 0
                 else: matrizCromo[i][j] = binario
-        print(matrizCromo[i])
         a=tuple(matrizCromo[i])
-        print(a)
         matrizA.append(a)
     return matrizA
 
@@ -158,16 +138,11 @@ def elitismo(poblacion, listaFitness):
     cromosomasSeleccionados = []
     for d in range(2):
         fitMax = max(listaFit)
-        """print("el fitness con valor mas grande es: ", fitMax)
-        print()"""
+
         indice = listaFit.index(
-            fitMax)  # Los otros elementos con el mismo valor se ignoran porque ya ha encontrado una coincidencia dentro de la lista.
-        """print("indice donde esta el valor maximo en listaFit: ", indice)
-        print()"""
+            fitMax)  # Los otros elementos con el mismo valor se ignoran porque ya ha encontrado una coincidencia dentro de la lista
         cromosomasSeleccionados.append(poblacion[indice])
         listaFit[indice] = 0
-        """print("listaFit al hacer la baja logica del maximo (asi no se vuelve a elegir): ", listaFit)
-        print()"""
     return cromosomasSeleccionados
 
 
@@ -191,10 +166,6 @@ def seleccionRuleta(ruleta, posiciones,poblacion):  # ruleta es la lista de valo
 
     # posiciones es int(sum(ruleta)) que seria el valor ENTERO de la suma de los valores de la lista ruleta.
     # poblacion es listaPoblacionInicialCadena que es la lista de los cromosomas en digitos binarios en formato STRING
-    print("ruleta ", ruleta)
-    print("la cantidad de posiciones en la ruleta son, posiciones:", posiciones)
-    print("la lista poblacion inicial cadena es: ", poblacion)
-    print("el largo de lista poblacion inicial cadena es: ", len(poblacion))
 
     ruletaDefinitiva = []  # es la lista de 100 posiciones en donde a cada posicion de esta lista se le asigna el cromosoma en formato STRING en la posicion i de la lista poblacion
     padres = []  # es la lista con los cromosomas en formato STRING que fueron seleccionados en la lista ruletaDefinitiva, que serian los padres
@@ -225,6 +196,7 @@ def seleccionCrossover(cromo1,cromo2):  # cromo 1 y cromo 2 van a tener c/u el c
     if (a <= probabilidadCrossover):
         #En hijo1 se aplicara crosover por fila
         hijo1 = []
+        i=0
         for i in range(len(cromo1)):
             cromo1[i] = list(cromo1[i])
             cromo2[i] = list(cromo2[i])
@@ -243,24 +215,25 @@ def seleccionCrossover(cromo1,cromo2):  # cromo 1 y cromo 2 van a tener c/u el c
         cromo1_Transpuesta = (np.transpose(cromo1)).tolist()
         cromo2_Transpuesta = (np.transpose(cromo2)).tolist()
         hijo2 = []
+        i=0
         for i in range(len(cromo1)):
             potenciaFila1 = calcularfuncObjFila(cromo1_Transpuesta[i])
             potenciaFila2 = calcularfuncObjFila(cromo2_Transpuesta[i])
-            if (potenciaFila1 == potenciaFila2):
+            if potenciaFila1 == potenciaFila2:
                 hijo2.append(cromo1_Transpuesta[i])
-            if (potenciaFila2 < potenciaFila1):
+            if potenciaFila2 < potenciaFila1:
                 hijo2.append(cromo1_Transpuesta[i])
-            if (potenciaFila1 < potenciaFila2):
+            if potenciaFila1 < potenciaFila2:
                 hijo2.append(cromo2_Transpuesta[i])
         hijo2 = (np.transpose(hijo2)).tolist()
 
-        if verificarCantAerogeneradores(hijo1) == True:
-            hijo1 = cromo1
-        if verificarCantAerogeneradores(hijo2) == True:
-            hijo2 = cromo2
+        if verificarCantAerogeneradores(hijo1):
+            hijo1 = cromo1.copy()
+        if verificarCantAerogeneradores(hijo2):
+            hijo2 = cromo2.copy()
     else:
-        hijo1 = cromo1
-        hijo2 = cromo2
+        hijo1 = cromo1.copy()
+        hijo2 = cromo2.copy()
     return hijo1, hijo2
 
 
@@ -276,18 +249,18 @@ def verificarCantAerogeneradores(cromosoma):
 
 def mutacion(cromo1): #le paso el cromosoma despues de haber con el croosover (puede que no se haya aplicado) y cromo es una cromosoma que a la vez es una lista de genes donde c/gen es un ENTERO binario
     cromoLista = []
+    i = 0
     for i in cromo1:
         c = list(i)
         cromoLista.append(c)
-    print("Lista de listas del cromosoma", cromoLista)
     d = random.uniform(0, 1)
-    if (d <= probabilidadMutacion):
-        i = random.randint(0, 9) #determinar una posicion al azar del cromosoma entre 0 a 29 (incluyendo 0 y 29)
-        j = random.randint(0, 9) #determinar una pos
-        if(cromoLista[i][j] == 0):
-            cromoLista[i][j]=1
-        else:
-            cromoLista[i][j]=0
+    if d <= probabilidadMutacion:
+        k = random.randint(0, 9)
+        j = random.randint(0, 9)
+        if cromoLista[k][j] == 0:
+            cromoLista[k][j] = 1
+        if cromoLista[k][j] == 1:
+            cromoLista[k][j] = 0
     cromito = tuple(cromoLista)
     return cromito #cromo1 es un cromosoma, que a la vez es una lista de genes donde c/gen es un ENTERO binario
 
@@ -386,21 +359,6 @@ def graficarTodo(minF, maxF, promF, minO, maxO, promO):
    #####################################
    #####################################"""
 
-"""
-for i in poblacionInicial:
-    for j in i:
-        print(j)
-    print("---------------------------")
-"""
-
-
-
-"""
-cont = 0
-for i in listaSiguienteGeneracion:
-    cont = cont + 1
-    print ("hijo nro ", cont, " :", i, "\n")
-"""
 print("#############################################################################"
       "#############################################################################"
       "#############################################################################"
@@ -419,16 +377,10 @@ def ejecutarPrograma(poblacion, iteracion):
         potencia_parque = CalcularfuncObj(i)
         listaPotencias.append(potencia_parque)
 
-    # muestro las potencias que obtuve de cada uno de los 10 parques
-    """for i in listaPotencias:
-        print(i)"""
 
     # aplico fitness a dichas potencias
     listaFitness = aplicarFitness(listaPotencias)
 
-    """##############################################################
-       ##############################################################
-       ##############################################################"""
     maxiObj = maximo(
         listaPotencias)  # retorna el valor maximo de la lista que tiene los valores de la funcion objetivo de cada cromosoma en formato FLOTANTE
     cromosomaMaximo = cromoMaximo(poblacion, maxiObj, listaPotencias)
@@ -479,14 +431,13 @@ def ejecutarPrograma(poblacion, iteracion):
     listaPadres.extend(cromosomasElitismo)
 
     listaPadres.extend(seleccionRuleta(ruleta, int(sum(ruleta)), poblacionInicial))
-    print(listaPadres)
 
     z = 0
     i = 0
     hijo1 = 0
     hijo2 = 0
     listaSiguienteGeneracion = []
-    for i in range(25):  # se repite 5 veces xq hay 5 pares de cromosomas padres para aplicar el crossover
+    for i in range(25):  # se repite 25 veces xq hay 25 pares de cromosomas padres para aplicar el crossover
         c1 = [x for x in listaPadres[
             z]]  # c1 es una lista en formato ENTERO donde cada posicion contiene un gen, es decir c1 es un cromosoma padre
         c2 = [x for x in listaPadres[
@@ -498,20 +449,6 @@ def ejecutarPrograma(poblacion, iteracion):
         listaSiguienteGeneracion.append(hijo1)
         listaSiguienteGeneracion.append(hijo2)
 
-    """
-    cont = 0
-    for i in listaSiguienteGeneracion:
-        cont = cont + 1
-        print ("hijo nro ", cont, " :", i, "\n")
-    """
-    print("#############################################################################"
-          "#############################################################################"
-          "#############################################################################"
-          "#############################################################################"
-          "#############################################################################"
-          "#############################################################################"
-          "#############################################################################"
-          "#############################################################################")
     return listaSiguienteGeneracion
 
 
@@ -537,20 +474,14 @@ matriz = asignarObstaculos(matriz, 9)
 for i in range(50):
     matrizAerogeneradores = []
     matrizAerogeneradores.extend(asginarAerogeneardor(matriz))
-    print(matrizAerogeneradores)
-
-    # matriz llena
-    print("matriz llena:")
-    for m in matrizAerogeneradores:
-        print(m)
 
     poblacionInicial.append(matrizAerogeneradores)
 
 i = 0
 listaSiguienteGeneracion = []
 listaSiguienteGeneracion.extend(ejecutarPrograma(poblacionInicial, i))
-for i in range(1, 200):
-    listaSiguienteGeneracion = ejecutarPrograma(listaSiguienteGeneracion, i)
+for l in range(1, 200):
+    listaSiguienteGeneracion = ejecutarPrograma(listaSiguienteGeneracion, l)
 
 tablaMinFit = pd.DataFrame({'Min Fitness': listaMinimosFit})
 tablaMaxFit = pd.DataFrame({'Max Fitness': listaMaximosFit})
@@ -564,7 +495,6 @@ max = 0
 nroIteracion = 0
 for k in listaMaximosObj:
     if k > max:
-        #print ('Máximo provisorio', k)
         max = k
         nroGeneracion = nroIteracion
     nroIteracion = nroIteracion + 1
