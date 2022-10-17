@@ -13,7 +13,7 @@ probabilidadCrossover = 0.75
 probabilidadMutacion = 0.05
 #la direccion del viento la voy a considerar constante y que recorra de OESTE a ESTE
 viento = 7 #en metros/segundos
-potencia = 164 #en Kw, no me acuerdo la formula que uso eric, cuando me la pase la coloco aca, pero por ahora le pongo una constante para seguir programando
+potencia = 164 #en Kw
 
 
 #variables globales necesarias para el efecto estela
